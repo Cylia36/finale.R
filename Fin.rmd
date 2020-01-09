@@ -6,7 +6,7 @@ output:
   pdf_document: default
   html_document: default
 ---
-# Are skilled musicians subject to the McGurk effect?Stephen Politzer-Ahles* & Lei Pan.
+# Are skilled musicians subject to the McGurk effect?Stephen Politzer-Ahles & Lei Pan.
 Department of Chinese and Bilingual Studies, The Hong Kong Polytechnic University,
 Hung Hom, Hong Kong
 ```{r results="hide"}
