@@ -1,0 +1,132 @@
+---
+title: "Final"
+author: "Oudjedi.cylia"
+date: "09/01/2020"
+output: html_document
+---
+
+
+# Are skilled musicians subject to the McGurk effect?Stephen Politzer-Ahles* & Lei Pan.
+Department of Chinese and Bilingual Studies, The Hong Kong Polytechnic University,
+Hung Hom, Hong Kong
+```{r}
+library(readr)
+data<- read_csv("combined_data.csv")
+```
+
+- Le jeu de données a été receuilli dans le cadre d'une éxpérience psycolinguistique sur l'effet McGurk, le but étant de voir si dans les groupes choisis ( musiciens et non musiciens) les musiciens étaient moins sensibles à cet effet optique car étant plus habitués à écouter de la musique et à percevoir des sons.
+l'éxpérience avait comme sujets des locuteurs natifs de Mandarin ou Cantonais, dévisés en deux groupes: 
+  Musiciens avec 13 ans de pratique
+  Non musiciens qui ont indiqué ne pas ecouter de la musique plus d'une heure par jours.
+## Explorations des données
+- inventaire des variables
+```{r}
+
+library(questionr)# librairie déja installée
+data <- read_csv("Data/combined_data.csv")
+names(data)
+
+```
+- Nombre de lignes et de colonnes du Tableau
+```{r}
+dim(data)
+
+```
+- Sur les 13 colonnes, seulement le code est quantitative.
+  * la colonnes "fullresp" correspond aux réponses données par les sujets. Resp reprend les données de Fullresp mais segmentées en consonnes et en voyelles et non plus comme syllabe 
+```{r}
+table(data$Fullresp)
+table(data$Resp)
+```
+  * la colonne Modality correspond aux formats des stimulis: audio ou audiovisual
+```{r}
+table(data$Modality)
+```
+  * Audio et Video  contiennet les consonnes qui ont servis de stimulis en audio et en audiovisuel 
+```{r}
+table(data$Audio)
+table(data$Video)
+```
+  * audPoA et vidPoA contiennet le lieux d'articuations des consonnes présentées en stimulis dans les deux formats audio et audiovisuel
+```{r}
+table(data$audPoA)
+table(data$vidPoA)
+```
+  * Correct est une variable Binaire, qui indique si les participants ont réussis l'éxpérience ou non 
+  
+```{r}
+table(data$Correct)
+```
+  
+  * Subject correspond aux sujets ayant passés l'éxpérience, résultat de 62 Sujets pour chaque groupe( 62 NM et 62 M)
+```{r}
+suj <- data$Subject
+unique(suj)
+```
+  * Nous avons deux groupes: Musiciens et non musiciens chaque groupe se composent de 62 sujets
+```{r}
+table(data$Group)
+```
+  
+  * ProverbioCond et  McGurkCond ont en commun les trois conditions suivantes: audio, audiovisual congruent et audiovisual incongruent.
+  cGurkCond sont des conditions prises pour les besoins de cette éxpérience et ProverbioCond sont les conditions prises dans une étude antérieur de Proverbio et al. (2016)
+  
+```{r}
+table(data$McGurkCond)
+table(data$ProverbioCond)
+```
+
+## Analyse
+- taux de réussite et d'échecs général
+```{r}
+freq(data$Correct)
+reussite <- table(data$Correct)
+barplot(reussite)
+```
+ On observe que le taux de réponse  correcte est supérieur à celui des fausses et que le test a dans la globalité était bien réussi par les deux groupes.
+
+```{r}
+library(dplyr)
+a <- filter ( data, Group == "nonmusician")
+ggplot(a) + geom_bar(position= "fill",aes(x = Modality, fill= Correct))
+
+```
+```{r}
+library(dplyr)
+b <- filter ( data, Group == "musician")
+ggplot(b) + geom_bar(position= "fill",aes(x = Modality, fill= Correct))
+```
+
+  * Les résulats des musiciens et des non musiciens sont assez similaires dans les deux modalités.
+  
+```{r}
+ggplot(data) + geom_bar(aes(x = Modality, fill = Correct), position = "dodge")
+```
+  * Les données globales montrent de meilleurs résultats dans la modalité  Audio comparés à ceux de la modalité Audiovisuel.
+
+
+```{r}
+ggplot(data) + geom_bar(aes(x = McGurkCond, fill = Correct), position = "dodge")
+```
+
+    * dans les conditions McGurk utilisées dans le cadre de l'éxprérience, les Audio ont été plus réussis que les deux autres conditions.
+    
+## Questions
+- les résulats de l'éxpérience nous montrent que le fait d'étre Musiciens ou non musiciens n'influence en rien le fait que nous nous basons sur le visuel pour distinguer les sons, pas de difference significative entre les deux groupes
+- 
+
+
+
+
+`
+
+
+
+
+
+
+
+
+
+ 
+  
