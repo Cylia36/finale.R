@@ -2,14 +2,14 @@
 title: "Final"
 author: "Oudjedi.cylia"
 date: "09/01/2020"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
-
-
 # Are skilled musicians subject to the McGurk effect?Stephen Politzer-Ahles* & Lei Pan.
 Department of Chinese and Bilingual Studies, The Hong Kong Polytechnic University,
 Hung Hom, Hong Kong
-```{r}
+```{r results="hide"}
 library(readr)
 data<- read_csv("combined_data.csv")
 ```
@@ -21,33 +21,31 @@ l'éxpérience avait comme sujets des locuteurs natifs de Mandarin ou Cantonais,
 ## Explorations des données
 - inventaire des variables
 ```{r}
-
-library(questionr)# librairie déja installée
-data <- read_csv("Data/combined_data.csv")
 names(data)
-
 ```
 - Nombre de lignes et de colonnes du Tableau
 ```{r}
 dim(data)
 
 ```
-- Sur les 13 colonnes, seulement le code est quantitative.
-  * la colonnes "fullresp" correspond aux réponses données par les sujets. Resp reprend les données de Fullresp mais segmentées en consonnes et en voyelles et non plus comme syllabe 
-```{r}
-table(data$Fullresp)
-table(data$Resp)
+- Sur les 13 colonnes, seulement la ligne portant le nom "code" est quantitative, le reste des colonnes sont qualitatives.
+
+  * la colonnes "fullresp" correspond aux réponses données par les sujets. Resp reprend les données de Fullresp mais segmentées en consonnes et en voyelles et non plus comme des syllabes 
+```{r results="hide"}
+
+unique(data$Fullresp)
+unique(data$Resp)
 ```
   * la colonne Modality correspond aux formats des stimulis: audio ou audiovisual
 ```{r}
 table(data$Modality)
 ```
-  * Audio et Video  contiennet les consonnes qui ont servis de stimulis en audio et en audiovisuel 
+  * Audio et Video  contiennent les consonnes qui ont servis de stimulis en audio et en audiovisuel 
 ```{r}
 table(data$Audio)
 table(data$Video)
 ```
-  * audPoA et vidPoA contiennet le lieux d'articuations des consonnes présentées en stimulis dans les deux formats audio et audiovisuel
+  * audPoA et vidPoA contiennent le lieux d'articuations des consonnes présentées en stimulis dans les deux formats audio et audiovisuel
 ```{r}
 table(data$audPoA)
 table(data$vidPoA)
@@ -58,7 +56,8 @@ table(data$vidPoA)
 table(data$Correct)
 ```
   
-  * Subject correspond aux sujets ayant passés l'éxpérience, résultat de 62 Sujets pour chaque groupe( 62 NM et 62 M)
+  * Subject correspond aux sujets ayant passés l'éxpérience.
+   résultat de 62 Sujets pour chaque groupe( 62 NM et 62 M)
 ```{r}
 suj <- data$Subject
 unique(suj)
@@ -79,42 +78,50 @@ table(data$ProverbioCond)
 ## Analyse
 - taux de réussite et d'échecs général
 ```{r}
+library(questionr)
 freq(data$Correct)
 reussite <- table(data$Correct)
 barplot(reussite)
 ```
  On observe que le taux de réponse  correcte est supérieur à celui des fausses et que le test a dans la globalité était bien réussi par les deux groupes.
 
+- On constate que les résulats des non musiciens sont meilleurs en ce qui concerne la modalité Audio, avec des résulats supérieur à la moyenne aussi en ce qui concerne les stimulis audiovisuel.
 ```{r}
+install.packages("tidyverse")
 library(dplyr)
-a <- filter ( data, Group == "nonmusician")
+a <- filter ( data, Group == "nonmusician")#extraire du tableau de donnée les données relatives au groupe des nons musiciens
+library(tidyverse)
 ggplot(a) + geom_bar(position= "fill",aes(x = Modality, fill= Correct))
 
 ```
+- Le résultat des Musiciens est meilleur en Audio, les graphiques sont relativement similaires. 
+
 ```{r}
 library(dplyr)
 b <- filter ( data, Group == "musician")
 ggplot(b) + geom_bar(position= "fill",aes(x = Modality, fill= Correct))
 ```
+```{r}
+ggplot(data) + geom_bar(aes(x = Subject, fill = Correct))
+```
 
-  * Les résulats des musiciens et des non musiciens sont assez similaires dans les deux modalités.
+- Dans la globalité, la modalité audio à de meilleurs résultats de bonne réponse pour les deux groupes, comparé à ceux de la modalité Audiovisuel
   
 ```{r}
 ggplot(data) + geom_bar(aes(x = Modality, fill = Correct), position = "dodge")
 ```
-  * Les données globales montrent de meilleurs résultats dans la modalité  Audio comparés à ceux de la modalité Audiovisuel.
-
+- En ce qui concerne les conditions éxpérimentales utilisées pour l'éxpérience "McGurkCond", l'audio a un meilleure taux de réponse correcte, "audiovisual congruent" a le résultat le plus faible.
 
 ```{r}
-ggplot(data) + geom_bar(aes(x = McGurkCond, fill = Correct), position = "dodge")
+ggplot(data) + geom_bar(aes(x = Correct, fill = McGurkCond), position = "dodge")
 ```
-
-    * dans les conditions McGurk utilisées dans le cadre de l'éxprérience, les Audio ont été plus réussis que les deux autres conditions.
-    
+ent
+ 
 ## Questions
-- les résulats de l'éxpérience nous montrent que le fait d'étre Musiciens ou non musiciens n'influence en rien le fait que nous nous basons sur le visuel pour distinguer les sons, pas de difference significative entre les deux groupes
-- 
+- les données de l'éxpérience nous montrent que les musiciens et les non musiciens ont le même taux de réussite et d'échecs, ce qui reviendrait à dire que le fait d'étre habitué à de la musique n'aide en rien quand le visuel s'en mêle
+  -Une autre analyse intéréssante à faire aurait été de voir les lieux d'articulations des consonnes dans les différents stimulis et de voir si y'a une correlation entre le lieux en Audio et en  audiovisuel. C'est à dire voir si l'erreur est dû au fait que les consonnes présentées en audiovisual sont proches d'un point de vue articulatoire, les erreurs viendrait du fait de la proximité du lieux d'articulations des consonnes réalisées 
 
+- En terme de stimulis, on pourrait réaliser la même éxperience sans les stimulis audio ou audiovisuels, mais avec des vidéos doublées, c'est à dire que le locuteur1 doublera à l'orale le locuteur 2 qui s'occupera du geste articulatoire, si les locuteur 1 articule correctement et que le locuteur 2 arrive à articuler un autre sons autres que celui de l'audio sans effet de mauvais doublage, on pourrait arriver si dans ce cas précis de doublage ( qui sera bien réalisé)les locuteurs se fie à l'oral ou au visuel.
 
 
 
